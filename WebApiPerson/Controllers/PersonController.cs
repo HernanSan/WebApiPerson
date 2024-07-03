@@ -9,9 +9,10 @@ using WebApiPerson.Context;
 using WebApiPerson.Models;
 
 namespace WebApiPerson.Controllers
-{
+{   
     [Route("api/[controller]")]
     [ApiController]
+    // Add this line to the PersonController class
     public class PersonController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -30,6 +31,7 @@ namespace WebApiPerson.Controllers
 
         // GET: api/Person/5
         [HttpGet("{id}")]
+        // 
         public async Task<ActionResult<Person>> GetPerson(int id)
         {
             var person = await _context.Persons.FindAsync(id);
@@ -41,6 +43,8 @@ namespace WebApiPerson.Controllers
 
             return person;
         }
+ 
+
 
         // PUT: api/Person/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
