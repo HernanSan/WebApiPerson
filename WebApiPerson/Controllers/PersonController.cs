@@ -31,8 +31,7 @@ namespace WebApiPerson.Controllers
 
         // GET: api/Person/5
         [HttpGet("{id}")]
-        // 
-        public async Task<ActionResult<Person>> GetPerson(int id)
+        public async Task<ActionResult<object>> GetPerson(int id)
         {
             var person = await _context.Persons.FindAsync(id);
 
@@ -41,10 +40,50 @@ namespace WebApiPerson.Controllers
                 return NotFound();
             }
 
-            return person;
-        }
- 
+            // Incluir el promedio y el estado de aprobación en la respuesta
+            return new
+            {
+                person.Id,
+                person.Name,
+                person.LastName,
+                person.Promedio, // Asegúrate de que esta propiedad calcule el promedio automáticamente
+                person.EstadoAprobacion // Asegúrate de que esta propiedad determine el estado automáticamente
 
+            };
+        }
+
+        // POST: api/Person
+
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Person>> PostPerson(Person person)
+        {
+            _context.Persons.Add(person);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
+        }
+
+        // DELETE: api/Person/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePerson(int id)
+        {
+            var person = await _context.Persons.FindAsync(id);
+            if (person == null)
+            {
+                return NotFound();
+            }
+
+            _context.Persons.Remove(person);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private bool PersonExists(int id)
+        {
+            return _context.Persons.Any(e => e.Id == id);
+        }
 
         // PUT: api/Person/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -75,38 +114,6 @@ namespace WebApiPerson.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: api/Person
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Person>> PostPerson(Person person)
-        {
-            _context.Persons.Add(person);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPerson", new { id = person.Id }, person);
-        }
-
-        // DELETE: api/Person/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePerson(int id)
-        {
-            var person = await _context.Persons.FindAsync(id);
-            if (person == null)
-            {
-                return NotFound();
-            }
-
-            _context.Persons.Remove(person);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PersonExists(int id)
-        {
-            return _context.Persons.Any(e => e.Id == id);
         }
     }
 }

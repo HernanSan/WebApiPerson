@@ -16,8 +16,12 @@ namespace WebApiPerson.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    Deberes = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    Examen = table.Column<decimal>(type: "decimal(18,3)", nullable: false),
+                    Promedio = table.Column<decimal>(type: "decimal(18,3)", nullable: true),
+                    EstadoAprobacion = table.Column<string>(type: "nvarchar(20)", nullable: true)
                 },
                 constraints: table =>
                 {
